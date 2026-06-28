@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Armario Virtual & Outfit Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=93">
+</head>
+
+<body>
+    <header class="glass-header plastic-header">
+        <img src="outfitazo.png" alt="OUTFItazo" class="main-logo">
+        <nav>
+            <button class="nav-btn active" data-tab="visualizer">Outfit Studio</button>
+            <button class="nav-btn" data-tab="wardrobe">Mi Armario</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Pestaña 1: Visualizador (Maniquí) -->
+        <section id="visualizer-tab" class="tab-content active">
+            <div class="studio-container">
+                <div class="mannequin-stage" id="closet-stage">
+                    <div class="closet-interior">
+                        <!-- Botón circular para voltear dentro del armario -->
+                        <button id="toggle-view-btn" class="wardrobe-flip-btn" title="Rotar prenda">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                                <path d="M3 3v5h5" />
+                            </svg>
+                        </button>
+
+                        <div class="mannequin-wrapper" id="mannequin">
+                            <!-- Tooltip flotante para información de la ropa -->
+                            <div id="clothing-tooltip" class="clothing-tooltip"></div>
+
+                            <!-- Las imágenes se inyectarán aquí por JS -->
+                            <div class="top-group" style="position: relative; width: 100%;">
+                                <div class="clothing-layer" id="layer-top"></div>
+                                <div class="clothing-layer" id="layer-outerwear"></div>
+                            </div>
+                            <div class="clothing-layer" id="layer-bottom"></div>
+                            <div class="clothing-layer" id="layer-shoes"></div>
+                        </div>
+                    </div>
+                    <!-- Puertas del armario -->
+                    <div class="closet-door left">
+                        <div class="handle"></div>
+                    </div>
+                    <div class="closet-door right">
+                        <div class="handle"></div>
+                    </div>
+                </div>
+
+                <div class="controls arcade-panel">
+                    <div class="arcade-body">
+                        <div class="arcade-modes">
+                            <div class="arcade-mode-group">
+                                <button class="arcade-btn green active" data-mode="smart"></button>
+                                <span>SMART</span>
+                            </div>
+                            <div class="arcade-mode-group">
+                                <button class="arcade-btn blue" data-mode="random"></button>
+                                <span>RANDOM</span>
+                            </div>
+                            <div class="arcade-mode-group">
+                                <button class="arcade-btn red" data-mode="manual"></button>
+                                <span>MANUAL</span>
+                            </div>
+                        </div>
+
+                        <div class="arcade-middle">
+                            <label class="arcade-switch">
+                                <input type="checkbox" id="include-outerwear">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="switch-label">+ SUDADERA</span>
+                        </div>
+
+                        <div class="arcade-joystick-area">
+                            <div class="joystick-container" id="generate-btn">
+                                <div class="joystick-base"></div>
+                                <div class="joystick-stick"></div>
+                                <div class="joystick-ball"></div>
+                            </div>
+                            <span class="joystick-label">START</span>
+                        </div>
+                    </div>
+                    <!-- Hidden input to maintain compatibility with app.js -->
+                    <input type="hidden" id="gen-mode" value="smart">
+                </div>
+            </div>
+        </section>
+        <!-- Pestaña 2: Gestión del Armario -->
+        <section id="wardrobe-tab" class="tab-content">
+            <div class="wardrobe-container">
+                <div class="add-item-panel glass-panel">
+                    <h2>Añadir Nueva Prenda</h2>
+                    <form id="add-item-form">
+                        <div class="form-group">
+                            <label>Categoría</label>
+                            <select id="item-category" required>
+                                <option value="top">Parte de Arriba (Camisetas, etc.)</option>
+                                <option value="outerwear">Sudadera / Chaqueta</option>
+                                <option value="bottom">Parte de Abajo (Pantalones, etc.)</option>
+                                <option value="shoes">Calzado</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Nombre descriptivo</label>
+                            <input type="text" id="item-name" placeholder="Ej. Camiseta Supreme" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Color Principal (para el algoritmo)</label>
+                            <select id="item-color" required>
+                                <option value="neutral">Neutro (Blanco, Negro, Gris, Beige)</option>
+                                <option value="warm">Cálido (Rojo, Naranja, Amarillo)</option>
+                                <option value="cold">Frío (Azul, Verde, Morado)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Estilo</label>
+                            <select id="item-style" required>
+                                <option value="casual">Casual / Diario</option>
+                                <option value="streetwear">Streetwear / Urbano</option>
+                                <option value="sport">Deportivo</option>
+                                <option value="formal">Formal / Elegante</option>
+                            </select>
+                        </div>
+
+                        <div class="image-upload-group">
+                            <div class="upload-box">
+                                <label>Imagen Frente</label>
+                                <input type="file" id="img-front" accept="image/*" required>
+                                <small>La IA le quitará el fondo</small>
+                            </div>
+                            <div class="upload-box" id="back-img-container">
+                                <label>Imagen Espalda</label>
+                                <input type="file" id="img-back" accept="image/*">
+                                <small>No requerida para zapatos</small>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="action-btn primary full-width">Guardar en Armario</button>
+                    </form>
+                </div>
+
+                <div class="wardrobe-drawer-container">
+                    <div class="wardrobe-drawer closed" id="collection-drawer">
+                        <!-- Cara Frontal -->
+                        <div class="drawer-face drawer-front" id="drawer-handle-btn">
+                            <div class="drawer-handle-bar"></div>
+                            <h2>Tu Colección</h2>
+                        </div>
+
+                        <!-- Cara Trasera (Interior) -->
+                        <div class="drawer-face drawer-back">
+                            <div class="drawer-interior-header">
+                                <h2>Tu Colección</h2>
+                                <button type="button" class="close-drawer-btn" id="close-drawer-btn">×</button>
+                            </div>
+                            <div class="drawer-back-grid-wrapper">
+                                <div class="drawer-back-grid-inner">
+                                    <div class="drawer-interior-content">
+                                        <div id="gallery-grid" class="grid">
+                                            <!-- Las prendas guardadas aparecerán aquí -->
+                                            <p class="empty-msg">Aún no has añadido ninguna prenda.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Selección Manual (Arcade Version) -->
+    <div id="manual-modal" class="modal hidden">
+        <div class="modal-content arcade-modal">
+            <div class="modal-header arcade-modal-header">
+                <h2 class="arcade-title neon-text-blue">SELECT YOUR GEAR</h2>
+                <button id="close-modal-btn" class="close-btn arcade-close">✖</button>
+            </div>
+            <div class="modal-body arcade-modal-body">
+                <div class="picker-section">
+                    <h3 class="arcade-subtitle">P1: TOP GEAR</h3>
+                    <div id="picker-tops" class="picker-grid"></div>
+                </div>
+                <div class="picker-section">
+                    <h3 class="arcade-subtitle">ARMOR / JACKET <small
+                            style="font-weight: normal; opacity: 0.7;">(OPTIONAL)</small></h3>
+                    <div id="picker-outerwears" class="picker-grid"></div>
+                </div>
+                <div class="picker-section">
+                    <h3 class="arcade-subtitle">P1: BOTTOM GEAR</h3>
+                    <div id="picker-bottoms" class="picker-grid"></div>
+                </div>
+                <div class="picker-section">
+                    <h3 class="arcade-subtitle">FOOTWEAR</h3>
+                    <div id="picker-shoes" class="picker-grid"></div>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 1.5rem;">
+                <button id="apply-manual-btn" class="arcade-start-btn full-width" disabled>PRESS START</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SVG Clip Path para la etiqueta con bordes redondeados -->
+    <svg width="0" height="0" style="position: absolute;">
+        <defs>
+            <clipPath id="tagClipRounded" clipPathUnits="objectBoundingBox">
+                <path d="
+                    M 0.15 0 
+                    L 0.85 0 
+                    Q 0.88 0, 0.895 0.01 
+                    L 0.99 0.06 
+                    Q 1 0.065, 1 0.08 
+                    L 1 0.97 
+                    Q 1 1, 0.97 1 
+                    L 0.03 1 
+                    Q 0 1, 0 0.97 
+                    L 0 0.08 
+                    Q 0 0.065, 0.01 0.06 
+                    L 0.105 0.01 
+                    Q 0.12 0, 0.15 0 
+                    Z" />
+            </clipPath>
+        </defs>
+    </svg>
+
+    <script src="app.js?v=93"></script>
+</body>
+</html>

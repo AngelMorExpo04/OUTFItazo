@@ -1,0 +1,1553 @@
+:root {
+    --bg-color: #0f172a;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --accent: #6366f1;
+    --accent-hover: #818cf8;
+    --glass-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background-color: #fafafa; /* Blanco muy sutilmente roto */
+    background-image: url('https://www.transparenttextures.com/patterns/stucco.png');
+    color: var(--text-main);
+    min-height: 100vh;
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+
+/* Typography */
+h1 { font-weight: 800; letter-spacing: -1px; }
+h2, h3 { font-weight: 600; margin-bottom: 1rem; }
+p, label { font-weight: 300; }
+
+/* Header & Nav */
+.glass-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    background: rgba(31, 41, 55, 0.85); /* Gris muy oscuro con transparencia */
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* Header con estética de funda de plástico (sobrescribiendo .glass-header) */
+.plastic-header {
+    background: rgba(15, 15, 20, 0.8) !important; /* Negro/Gris muy oscuro casi opaco */
+    border-bottom: none !important;
+    backdrop-filter: blur(12px) !important; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 15px rgba(255,255,255,0.05) !important;
+    overflow: hidden;
+}
+
+.plastic-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    /* Mantenemos brillos blancos sutiles para el efecto plástico */
+    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 20%, transparent 70%, rgba(255,255,255,0.02) 100%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.main-logo {
+    height: 48px; 
+    width: auto;
+    object-fit: contain;
+    /* Eliminado el fondo oscuro a petición del usuario */
+}
+
+/* Ajustes de color para las letras del menú sobre fondo oscuro */
+.plastic-header .nav-btn {
+    color: #94a3b8; /* Gris claro (letras) */
+    background: rgba(0, 0, 0, 0.4); /* Botones normales (fondo negro transparente) */
+    border: 1px solid transparent;
+}
+
+.plastic-header .nav-btn:hover {
+    color: #f8fafc; /* Blanco al pasar el ratón */
+    background: rgba(0, 0, 0, 0.6); 
+}
+
+.plastic-header .nav-btn.active {
+    background: linear-gradient(to right, #9cbef3, #a7dfd2, #f6ea9e, #f8b8d1, #d8a7e3); /* Degradado pastel estilo logo */
+    color: #ffffff; /* Blanco puro */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3); /* Sombra exterior para que destaque sobre el plástico oscuro */
+    text-shadow: 0 1px 3px rgba(0,0,0,0.4); /* Sombra en el texto para que el blanco se lea bien sobre los colores claros */
+}
+
+nav {
+    display: flex;
+    gap: 1rem;
+}
+
+.nav-btn {
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.nav-btn:hover { color: var(--text-main); }
+.nav-btn.active {
+    background: var(--glass-border);
+    color: var(--text-main);
+}
+
+/* Tabs */
+.tab-content {
+    display: none;
+    padding: 2rem 3rem;
+    animation: fadeIn 0.4s ease;
+}
+.tab-content.active { display: block; }
+
+#visualizer-tab {
+    padding-bottom: 0 !important; /* Eliminamos el hueco inferior para que la mesa llegue hasta el borde final */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Glass Panels */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* =========================================================
+   AÑADIR PRENDA - Estilo Etiqueta Premium (Boutique Tag) 
+   ========================================================= */
+.add-item-panel {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    position: relative;
+    padding: 4rem 3rem 3rem 3rem !important; /* Espacio extra arriba para el agujero */
+    margin-bottom: 2rem;
+    
+    /* Efecto 3D de levantado por arriba */
+    transform-origin: bottom center;
+    transform: perspective(1000px) rotateX(4deg);
+    filter: drop-shadow(0 25px 15px rgba(0,0,0,0.25)); /* Sombra proyectada del conjunto */
+}
+
+/* El fondo con forma de etiqueta (aplicado en un pseudo-elemento para no cortar la cuerda) */
+.add-item-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #efdfc1;
+    background-image: url('https://www.transparenttextures.com/patterns/handmade-paper.png'), url('https://www.transparenttextures.com/patterns/handmade-paper.png');
+    border: 1px solid #e0ddd5;
+    clip-path: url(#tagClipRounded); /* Forma de etiqueta con bordes redondeados (SVG en el HTML) */
+    z-index: -2;
+}
+
+/* El agujero */
+#add-item-form::before {
+    content: '';
+    position: absolute;
+    top: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1.2rem;
+    height: 1.2rem;
+    background: #fafafa; /* Fondo de la página para que parezca hueco */
+    border-radius: 50%;
+    box-shadow: inset 0 3px 6px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.5);
+    z-index: 2;
+}
+
+/* Cuerda de la etiqueta curvada hacia la derecha hasta salir de la pantalla */
+.add-item-panel::after {
+    content: '';
+    position: absolute;
+    top: -120px; /* Sube más alto */
+    left: 50%; /* Nace en el centro horizontal (en el agujero) */
+    width: 60vw; /* Se extiende muchísimo hacia la derecha para que se corte al final */
+    height: calc(120px + 1.5rem + 0.6rem); /* Baja exactamente hasta el centro del agujero */
+    border-left: 2px solid #c5a880; /* El hilo */
+    border-top: 2px solid #c5a880;
+    border-right: none;
+    border-bottom: none;
+    border-top-left-radius: 100%; /* Curva perfecta de elipse de abajo-izquierda a arriba-derecha */
+    background: transparent;
+    pointer-events: none;
+    z-index: -1; /* Por detrás de la etiqueta */
+}
+
+/* Tipografía de la etiqueta */
+.add-item-panel h2 {
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 4px;
+    font-weight: 800;
+    font-size: 1.3rem;
+    margin-bottom: 2.5rem;
+    color: #000;
+    border-bottom: 2px solid #000;
+    padding-bottom: 1rem;
+}
+
+/* Labels minimalistas */
+.add-item-panel .form-group label {
+    color: #555 !important;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+
+/* Inputs como "Rellenar el hueco" */
+.add-item-panel input[type="text"], 
+.add-item-panel select {
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid #aaa !important;
+    border-radius: 0 !important;
+    color: #000 !important;
+    padding: 0.5rem 0 !important;
+    font-weight: 400;
+    box-shadow: none !important;
+}
+
+.add-item-panel input[type="text"]:focus, 
+.add-item-panel select:focus {
+    border-bottom-color: #000 !important;
+    background: rgba(0,0,0,0.02) !important;
+}
+
+/* Upload boxes elegantes */
+.add-item-panel .upload-box {
+    background: rgba(255,255,255,0.5) !important;
+    border: 1px dashed #aaa !important;
+    border-radius: 4px !important;
+    color: #333 !important;
+    transition: all 0.3s ease;
+}
+
+.add-item-panel .upload-box:hover {
+    border-color: #000 !important;
+    background: #fff !important;
+}
+
+.add-item-panel .upload-box label {
+    color: #000 !important;
+    font-weight: 800 !important;
+}
+
+.add-item-panel .upload-box small {
+    color: #777 !important;
+}
+
+/* Botón de guardar tipo etiqueta */
+.add-item-panel .action-btn.primary {
+    background: #000 !important;
+    color: #fff !important;
+    border-radius: 2px !important;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
+    transition: all 0.3s ease;
+    margin-top: 1.5rem;
+    padding: 1rem;
+}
+
+.add-item-panel .action-btn.primary:hover {
+    background: #333 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3) !important;
+}
+
+/* Fake Barcode al final del formulario */
+#add-item-form::after {
+    content: '';
+    display: block;
+    height: 45px;
+    margin-top: 2.5rem;
+    margin-bottom: 0.5rem;
+    background-image: repeating-linear-gradient(
+        90deg,
+        #111,
+        #111 2px,
+        transparent 2px,
+        transparent 4px,
+        #111 4px,
+        #111 6px,
+        transparent 6px,
+        transparent 9px,
+        #111 9px,
+        #111 11px,
+        transparent 11px,
+        transparent 14px
+    );
+    opacity: 0.85;
+    border-radius: 2px;
+}
+
+/* Buttons */
+.action-btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.action-btn.primary {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+.action-btn.primary:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+}
+.action-btn.secondary {
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
+.action-btn.secondary:hover { background: rgba(255,255,255,0.2); }
+.full-width { width: 100%; margin-top: 1rem; }
+
+/* Forms */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+input[type="text"], select {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--glass-border);
+    color: white;
+    font-family: 'Outfit', sans-serif;
+}
+input[type="text"]:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+/* Upload */
+.image-upload-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.upload-box {
+    flex: 1;
+    background: rgba(0,0,0,0.2);
+    border: 1px dashed var(--glass-border);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+}
+.upload-box input { width: 100%; margin-top: 0.5rem; font-size: 0.8rem;}
+.upload-box small { display: block; color: var(--text-muted); margin-top: 0.5rem; font-size: 0.75rem;}
+
+/* Studio Layout */
+.studio-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Empuja el contenido hacia abajo para que quede pegado al final */
+    align-items: center;
+    min-height: calc(100vh - 120px);
+    gap: 0; /* Quitamos el gap para juntarlo más */
+    padding-bottom: 0; /* Quitamos el padding inferior */
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Closet Stage Styling */
+.mannequin-stage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    position: relative;
+    perspective: 1500px; /* Para la animación 3D de las puertas */
+    width: 380px;
+    height: 680px;
+    margin: 0 auto;
+}
+
+.closet-interior {
+    width: 100%;
+    height: 100%;
+    background-color: #d6be96; /* Abedul interior */
+    background-image: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.3)), url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+    border-radius: 10px;
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.4); /* Sombra más suave para madera clara */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+}
+
+/* Botón flotante para voltear la prenda */
+.wardrobe-flip-btn {
+    position: absolute;
+    top: 20px; /* Arriba */
+    left: 50%; /* Centro */
+    width: 40px; /* Más pequeño */
+    height: 40px; /* Más pequeño */
+    border-radius: 50%;
+    background: linear-gradient(145deg, #3a3a3a, #454545); /* Gris oscuro profundo */
+    box-shadow:  3px 3px 6px rgba(0,0,0,0.6), -2px -2px 5px rgba(255,255,255,0.1);
+    border: 1px solid #2a2a2a;
+    color: #b0b0b0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 25; /* Por encima de la ropa */
+    
+    /* Oculto por defecto */
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) scale(0.9);
+    transition: opacity 0.2s 0s, transform 0.2s 0s, box-shadow 0.2s, background 0.2s;
+}
+
+/* Solo aparece cuando el armario se abre */
+#closet-stage.open .wardrobe-flip-btn {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) scale(1);
+    transition: opacity 0.4s 0.6s, transform 0.4s 0.6s, box-shadow 0.2s, background 0.2s; /* Retardo para aparecer cuando la puerta ya casi esté abierta */
+}
+
+.wardrobe-flip-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.wardrobe-flip-btn:hover {
+    color: #ffffff; /* Brilla al pasar el ratón */
+    transform: translateX(-50%) scale(1.05) !important;
+}
+
+.wardrobe-flip-btn:active {
+    box-shadow: inset 3px 3px 6px rgba(0,0,0,0.5), inset -2px -2px 5px rgba(255,255,255,0.1);
+    background: linear-gradient(145deg, #2a2a2a, #353535);
+    transform: translateX(-50%) scale(0.95) !important;
+}
+
+.closet-door {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background-color: #ebd7b2; /* Abedul frontal */
+    background-image: linear-gradient(rgba(255,255,255,0.3), rgba(0,0,0,0.05)), url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+    border: 2px solid #bda884;
+    z-index: 10;
+    transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 5px 0 15px rgba(0,0,0,0.5);
+    transform-style: preserve-3d;
+}
+
+.closet-door.left {
+    left: 0;
+    transform-origin: left center;
+    border-right: 1px solid #9e8a69;
+    border-radius: 10px 0 0 10px;
+}
+
+.closet-door.right {
+    right: 0;
+    transform-origin: right center;
+    border-left: 1px solid #9e8a69;
+    border-radius: 0 10px 10px 0;
+}
+
+/* Tiradores del armario */
+.closet-door .handle {
+    position: absolute;
+    top: 50%;
+    width: 12px;
+    height: 80px;
+    background: linear-gradient(90deg, #434343, #1f1f1f); /* Hierro oscuro para que destaque en madera clara */
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5), inset 1px 1px 2px rgba(255,255,255,0.5);
+    border-radius: 6px;
+    transform: translateY(-50%);
+}
+
+.closet-door.left .handle {
+    right: 15px;
+}
+.closet-door.right .handle {
+    left: 15px;
+}
+
+/* Animación de apertura */
+#closet-stage.open .closet-door.left {
+    transform: rotateY(-110deg);
+}
+#closet-stage.open .closet-door.right {
+    transform: rotateY(110deg);
+}
+
+/* Cajoneras de madera (Controles) */
+.wooden-drawers {
+    background-color: #ebd7b2;
+    background-image: linear-gradient(rgba(255,255,255,0.3), rgba(0,0,0,0.05)), url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+    border: 2px solid #bda884;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.7), 0 10px 30px rgba(0,0,0,0.5);
+    border-radius: 12px;
+    padding: 2.5rem 1.5rem 1.5rem 1.5rem; /* Más espacio arriba para el tirador */
+    position: relative;
+    overflow: hidden; /* Evita que los separadores salgan por fuera */
+}
+
+/* Tirador del cajón (metálico) */
+.wooden-drawers::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 12px;
+    background: linear-gradient(180deg, #434343, #1f1f1f); /* Hierro oscuro */
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.8), inset 0 1px 2px rgba(255,255,255,0.6);
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Detalle visual de cajón */
+.wooden-drawers::after {
+    content: '';
+    position: absolute;
+    bottom: 30%;
+    left: 0; right: 0;
+    height: 2px;
+    background: #9e8a69;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.1);
+    pointer-events: none;
+}
+
+.mannequin-wrapper {
+    position: relative;
+    width: 300px;
+    height: 600px;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+.mannequin-wrapper.flipped {
+    transform: rotateY(180deg);
+}
+
+.clothing-layer {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: background-image 0.5s, background-size 0.3s, background-position 0.3s, filter 0.2s;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.clothing-layer:hover {
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+}
+
+#layer-outerwear {
+    position: absolute;
+    top: -10px;
+    left: -5%;
+    width: 110%;
+    height: 105%;
+    z-index: 2;
+    background-size: contain;
+    background-position: top center;
+    background-repeat: no-repeat;
+    transition: background-image 0.5s;
+    pointer-events: none; /* Los clicks pasan al top-group */
+}
+
+.top-group.has-outerwear #layer-top {
+    background-size: 90%;
+    background-position: bottom center;
+    opacity: 0.8; /* Slight shade for realism under hoodie */
+}
+
+/* Z-index para superponer correctamente */
+.top-group { position: absolute; width: 100%; left: 0; height: 45%; top: 5%; z-index: 2; cursor: pointer; }
+.top-group:hover #layer-top, .top-group:hover #layer-outerwear {
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.4));
+}
+#layer-top { height: 100%; top: 0; z-index: 1; }
+#layer-bottom { height: 50%; top: 40%; z-index: 1; }
+#layer-shoes { height: 15%; bottom: 0; z-index: 3; }
+
+/* Tooltip para prendas (Formato Tazo) */
+.clothing-tooltip {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    color: white;
+    padding: 5px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(-50%) translateX(-20px);
+    white-space: normal;
+    text-align: center;
+    z-index: 100;
+    box-shadow: inset -5px -5px 10px rgba(0,0,0,0.4), inset 5px 5px 10px rgba(255,255,255,0.3), 5px 5px 15px rgba(0,0,0,0.5);
+    border: 3px solid rgba(255,255,255,0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.clothing-tooltip.show {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+}
+
+/* Al voltear las zapatillas (solo aplicamos clase mirror por JS ya que no tienen foto de espalda) */
+.mirrored { transform: scaleX(-1); }
+
+/* Animación al generar */
+.generating #layer-top { animation: shuffle 0.2s infinite; }
+.generating #layer-bottom { animation: shuffle 0.2s infinite 0.1s; }
+.generating #layer-shoes { animation: shuffle 0.2s infinite 0.05s; }
+
+@keyframes shuffle {
+    0% { opacity: 0.5; filter: blur(2px); }
+    50% { opacity: 0.8; filter: blur(0px); }
+    100% { opacity: 0.5; filter: blur(2px); }
+}
+
+/* Wardrobe Drawer (Interactive Collection) */
+.wardrobe-drawer-container {
+    margin-top: 2rem;
+    perspective: 1500px;
+}
+
+.wardrobe-drawer {
+    display: grid;
+    grid-template-areas: "card";
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wardrobe-drawer.open {
+    transform: rotateX(-180deg);
+}
+
+.drawer-face {
+    grid-area: card;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.drawer-front {
+    background-color: #ebd7b2;
+    background-image: linear-gradient(rgba(255,255,255,0.3), rgba(0,0,0,0.05)), url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+    border: 2px solid #bda884;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.7), 0 10px 30px rgba(0,0,0,0.5);
+    border-radius: 12px;
+    padding: 2.5rem 1.5rem 1.5rem 1.5rem;
+    cursor: pointer;
+    text-align: center;
+    transition: filter 0.2s;
+    transform: rotateX(0deg); /* Explicito para evitar bugs visuales */
+    align-self: start; /* Evita que el frontal se estire a la altura gigante del reverso */
+}
+
+.drawer-front:hover {
+    filter: brightness(1.1);
+}
+
+.drawer-front:active {
+    transform: scale(0.99) rotateX(0deg);
+}
+
+.drawer-handle-bar {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 14px;
+    background: linear-gradient(180deg, #434343, #1f1f1f); /* Hierro oscuro */
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.8), inset 0 1px 2px rgba(255,255,255,0.6);
+}
+
+.drawer-front h2 {
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+}
+
+/* Cara Trasera (Interior del cajón) */
+.drawer-back {
+    transform: rotateX(180deg);
+    background-color: #d6be96; /* Abedul interior */
+    background-image: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.3)), url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+    border-radius: 16px;
+    border: 2px solid #bda884;
+    box-shadow: inset 0 20px 50px rgba(0,0,0,0.9), 0 10px 30px rgba(0,0,0,0.5);
+    padding: 2rem 1.5rem;
+}
+
+.drawer-interior-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 1rem;
+}
+
+.drawer-interior-header h2 {
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+}
+
+.close-drawer-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 2.5rem;
+    cursor: pointer;
+    line-height: 0.5;
+    transition: color 0.3s;
+}
+
+.close-drawer-btn:hover {
+    color: white;
+}
+
+/* Animación de expansión de altura en el reverso */
+.drawer-back-grid-wrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wardrobe-drawer.open .drawer-back-grid-wrapper {
+    grid-template-rows: 1fr;
+}
+
+.drawer-back-grid-inner {
+    min-height: 0;
+    overflow: hidden;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 4px; /* Las separaciones entre bolsillos */
+    margin-top: 1rem;
+    background: transparent; /* Quitamos el fondo para que las separaciones las hagan los propios bolsillos */
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 6px;
+    backdrop-filter: blur(1px); /* Plástico mucho más transparente */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 15px rgba(255,255,255,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Plastic wrinkles and reflections over the entire grid */
+.grid::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 20%, transparent 70%, rgba(255,255,255,0.05) 100%);
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* Individual pockets inside the plastic sheet */
+.tazo-pocket {
+    background: rgba(0, 0, 0, 0.08); /* Ligeramente oscurecido para dar contraste al brillo */
+    padding: 0.8rem;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1 / 1.15;
+    /* Efecto 3D de termosellado: borde blanco muy sutil (brillo) y sombras negras (profundidad) */
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    box-shadow: 
+        0 0 5px rgba(0, 0, 0, 0.6), /* Sombra negra exterior hacia la separación */
+        inset 0 0 20px rgba(0,0,0,0.3); /* Sombra negra interior del bolsillo */
+}
+
+.wardrobe-item {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    position: relative;
+    box-shadow: 
+        inset -8px -8px 20px rgba(0,0,0,0.4), 
+        inset 8px 8px 20px rgba(255,255,255,0.15),
+        2px 2px 10px rgba(0,0,0,0.5);
+    border: 3px solid rgba(255,255,255,0.15);
+    text-align: center;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+    transform: perspective(800px) rotateX(0deg) rotateY(0deg) translateZ(0);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    will-change: transform, box-shadow;
+    outline: 1px solid transparent; /* Fuerza el anti-aliasing en los bordes */
+}
+
+.wardrobe-item:hover {
+    transform: perspective(800px) rotateX(15deg) rotateY(-15deg) translateZ(30px);
+    box-shadow: 
+        inset -8px -8px 20px rgba(0,0,0,0.4), 
+        inset 15px 15px 30px rgba(255,255,255,0.5),
+        20px 20px 30px rgba(0,0,0,0.6);
+}
+
+/* Brillo de luz simple cruzando el tazo */
+.wardrobe-item::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 50%;
+    background-image: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%);
+    background-size: 250% 250%;
+    background-repeat: no-repeat;
+    background-position: 200% 200%;
+    pointer-events: none;
+    z-index: 5;
+    transition: background-position 0.6s ease-in-out;
+}
+
+.wardrobe-item:hover::after {
+    background-position: -100% -100%;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: #ef4444;
+    color: white;
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    z-index: 20;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.delete-btn:hover {
+    background: #dc2626;
+    transform: scale(1.1);
+}
+
+.wardrobe-item img {
+    width: 55%;
+    height: 55%;
+    object-fit: contain;
+    margin-bottom: 0.3rem;
+    filter: drop-shadow(2px 5px 5px rgba(0,0,0,0.5));
+}
+
+.wardrobe-item h4 {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 0.3rem;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    line-height: 1.1;
+    max-width: 90%;
+    word-break: break-word;
+}
+
+.tazo-badges {
+    display: flex;
+    gap: 0.3rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.item-badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    padding: 0.15rem 0.35rem;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.4);
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.2);
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.empty-msg {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* ======== Modal Manual (Arcade Edition) ======== */
+.modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.85); /* Más oscuro para resaltar los neones */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Efecto de desenfoque robusto para toda la aplicación trasera (evita bugs de 3D) */
+main, header {
+    transition: filter 0.3s ease;
+}
+body.modal-open main,
+body.modal-open header {
+    filter: blur(8px) brightness(0.5);
+    pointer-events: none;
+}
+
+/* --- ARCADE CRT SCREEN --- */
+.arcade-modal {
+    width: min(90%, calc(100vw - 2rem));
+    max-width: 650px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    margin: auto;
+    background: #0a0a0c;
+    border: 4px solid #3b82f6;
+    border-radius: 8px;
+    box-shadow: 
+        0 0 20px rgba(59, 130, 246, 0.5),
+        inset 0 0 30px rgba(0,0,0,0.8);
+    position: relative;
+    overflow: hidden; /* Cortar contenido, las scanlines van en un pseudo elemento */
+}
+
+/* CRT Scanlines and curvature effect (BACKGROUND) */
+.arcade-modal::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 4px, 3px 100%;
+    pointer-events: none;
+    z-index: 1; /* Bajado drásticamente para que se quede al fondo */
+    border-radius: 4px;
+}
+
+.arcade-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    z-index: 10;
+}
+
+.arcade-title {
+    font-family: 'Courier New', Courier, monospace; /* Pseudo pixel/retro look fallback */
+    font-weight: 800;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    margin: 0;
+    color: #3b82f6;
+    text-shadow: 
+        0 0 5px #3b82f6,
+        0 0 10px #3b82f6,
+        0 0 20px #3b82f6;
+    animation: neon-flicker 3s infinite alternate;
+}
+
+@keyframes neon-flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        text-shadow: 0 0 5px #3b82f6, 0 0 10px #3b82f6, 0 0 20px #3b82f6;
+        opacity: 1;
+    }
+    20%, 24%, 55% {
+        text-shadow: none;
+        opacity: 0.5;
+    }
+}
+
+.arcade-close {
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    font-size: 2rem;
+    cursor: pointer;
+    text-shadow: 0 0 10px #ef4444;
+    transition: transform 0.2s, text-shadow 0.2s;
+}
+.arcade-close:hover {
+    transform: scale(1.2);
+    text-shadow: 0 0 20px #ef4444, 0 0 30px #ef4444;
+}
+
+.arcade-modal-body {
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-grow: 1;
+    padding-right: 0.5rem;
+    width: 100%;
+    min-width: 0;
+    position: relative; /* Asegurar que se posicione sobre el ::after */
+    z-index: 10;
+}
+.arcade-modal-body::-webkit-scrollbar { width: 8px; }
+.arcade-modal-body::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 0; }
+.arcade-modal-body::-webkit-scrollbar-track { background: #111; }
+
+.picker-section {
+    margin-bottom: 1.5rem;
+}
+
+.arcade-subtitle {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #fbbf24; /* Amarillo arcade */
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 5px #fbbf24;
+    border-bottom: 2px dashed rgba(251, 191, 36, 0.4);
+    padding-bottom: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.picker-grid {
+    display: flex;
+    flex-wrap: wrap; /* Permitir que bajen a la siguiente fila si no caben */
+    gap: 1.5rem; /* Más separación entre ellos */
+    padding: 1.5rem 1rem; /* Más padding izquierdo/derecho para que no se corten al hacerse grandes en 3D */
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    align-items: flex-start;
+}
+/* Ya no necesitamos scrollbar horizontal personalizado porque ahora envuelven hacia abajo */
+
+.picker-item {
+    flex: 0 0 100px;
+    width: 100px;
+    min-width: 100px;
+    height: 100px;
+    min-height: 100px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    background: #1a1a24;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.2s;
+    position: relative;
+    overflow: hidden;
+
+    /* Estilo de "Tazo 3D" idéntico a Tu Colección */
+    box-shadow: 
+        inset -8px -8px 20px rgba(0,0,0,0.4), 
+        inset 8px 8px 20px rgba(255,255,255,0.15),
+        2px 2px 10px rgba(0,0,0,0.5);
+    border: 3px solid rgba(255,255,255,0.15);
+    transform: perspective(800px) rotateX(0deg) rotateY(0deg) translateZ(0);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
+
+/* Filtro de Pixel Art (Overlay de malla) para el fondo del tazo */
+.picker-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: 
+        linear-gradient(transparent 50%, rgba(0,0,0,0.4) 50%),
+        linear-gradient(90deg, transparent 50%, rgba(0,0,0,0.4) 50%);
+    background-size: 4px 4px;
+    z-index: 2; /* Bajamos el z-index del filtro para que quede detrás de la imagen */
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    border-radius: 50%;
+}
+
+/* Las imágenes ya no tienen filtro pixelart */
+.picker-item img {
+    width: 65%; height: 65%; 
+    object-fit: contain; 
+    filter: drop-shadow(2px 5px 5px rgba(0,0,0,0.5));
+    transition: transform 0.2s;
+    z-index: 5; /* Subimos el z-index de la imagen para que esté por encima del filtro */
+    position: relative; /* Necesario para que z-index funcione correctamente si no lo tuviera */
+}
+
+/* Hover 3D idéntico a la colección */
+.picker-item:hover {
+    transform: perspective(800px) rotateX(15deg) rotateY(-15deg) translateZ(20px);
+    box-shadow: 
+        inset -8px -8px 20px rgba(0,0,0,0.4), 
+        inset 15px 15px 30px rgba(255,255,255,0.5),
+        10px 10px 20px rgba(0,0,0,0.6);
+}
+
+/* Estado seleccionado con borde neón manteniendo el 3D */
+.picker-item.selected {
+    border-color: #10b981;
+    transform: perspective(800px) rotateX(20deg) rotateY(-20deg) translateZ(30px) scale(1.1);
+    box-shadow: 
+        inset -8px -8px 20px rgba(0,0,0,0.4), 
+        inset 15px 15px 30px rgba(16, 185, 129, 0.5),
+        15px 15px 30px rgba(0,0,0,0.7),
+        0 0 20px rgba(16, 185, 129, 0.4);
+}
+
+/* Brillo de luz cruzando el tazo (idéntico a la colección) */
+.picker-item::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 50%;
+    background-image: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%);
+    background-size: 250% 250%;
+    background-repeat: no-repeat;
+    background-position: 200% 200%;
+    pointer-events: none;
+    z-index: 5;
+    transition: background-position 0.6s ease-in-out;
+}
+
+.picker-item:hover::after,
+.picker-item.selected::after {
+    background-position: -100% -100%;
+}
+
+/* START BUTTON */
+.arcade-start-btn {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 800;
+    font-size: 1.4rem;
+    padding: 1rem;
+    border: 3px solid #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.4), inset 0 0 10px rgba(16, 185, 129, 0.2);
+    transition: all 0.2s;
+    text-shadow: 0 0 5px #10b981;
+    border-radius: 4px;
+    z-index: 10;
+}
+
+.arcade-start-btn:hover:not(:disabled) {
+    background: #10b981;
+    color: #000;
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.5);
+    text-shadow: none;
+    transform: scale(1.02);
+}
+
+.arcade-start-btn:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.arcade-start-btn:disabled {
+    border-color: #555;
+    color: #555;
+    background: rgba(0,0,0,0.5);
+    box-shadow: none;
+    text-shadow: none;
+    cursor: not-allowed;
+    animation: none;
+}
+
+
+/* --- RESPONSIVE DESIGN (MOBILE OPTIMIZATION) --- */
+@media (max-width: 1024px) {
+    .studio-container {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+    .left-controls {
+        order: 2;
+    }
+    .mannequin-stage {
+        order: 1;
+        padding: 2rem 0;
+    }
+    .right-controls {
+        order: 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .glass-header {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+    }
+    
+    nav {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+    }
+    
+    .nav-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .tab-content {
+        padding: 1.5rem 1rem;
+    }
+    
+    .mannequin-stage {
+        width: 100%;
+        max-width: 320px;
+        height: 520px;
+        padding: 0;
+    }
+
+    .mannequin-wrapper {
+        height: 450px;
+        width: 225px;
+    }
+    
+    .image-upload-group {
+        flex-direction: column;
+    }
+    
+    .toggle-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .generator-options {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+        margin-top: 1.5rem;
+    }
+    
+    .generator-options label {
+        margin-bottom: -0.5rem;
+    }
+}
+
+/* ======== Arcade Panel UI (Mesa 3D) ======== */
+.arcade-panel {
+    position: relative; /* Cambiamos de fixed a relative para que se quede en el flujo bajo el armario */
+    width: 140vw; /* Más ancho para la perspectiva */
+    height: auto;
+    min-height: 200px;
+    background: linear-gradient(180deg, #2a2a2a, #0a0a0a);
+    border: none;
+    border-radius: 0;
+    padding: 3rem 0 6rem 0; /* Aumentamos mucho el padding inferior para que tape el hueco blanco de abajo */
+    margin-top: -4.5rem; /* Aumentado para cubrir el hueco blanco que dejó el borde borrado arriba */
+    margin-bottom: -4rem; /* Margen negativo inferior para empujarlo fuera de la pantalla */
+    box-shadow: 0 -20px 40px rgba(0,0,0,0.9), inset 0 5px 15px rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    order: 2; /* <-- Aseguramos que siempre va después del armario (order: 1) */
+    
+    /* Perspectiva de mesa arcade */
+    transform-origin: bottom center;
+    transform: perspective(1000px) rotateX(25deg);
+}
+
+/* Neon grid line effect */
+.arcade-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
+    pointer-events: none;
+    z-index: 1; /* Por encima del contenido en general, pero como pointer-events none */
+}
+
+.arcade-body {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap; /* Permitimos que los elementos pasen a la siguiente línea si no caben */
+    justify-content: space-around;
+    align-items: center;
+    gap: 2rem;
+    width: 100vw; /* Restringimos el contenido al ancho real de la pantalla */
+    max-width: 900px;
+    padding: 0 1rem;
+    z-index: 1;
+}
+
+.arcade-header {
+    display: none; /* Lo ocultamos para el diseño horizontal de mesa */
+}
+
+.arcade-modes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.arcade-mode-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.arcade-mode-group span {
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-shadow: 0 -1px 0 #000;
+}
+
+/* Arcade Buttons 3D */
+.arcade-btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 3px solid #000;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    /* 3D Border / Side of the button */
+    box-shadow: 0 12px 0 #111, 0 15px 20px rgba(0,0,0,0.8), inset 0 5px 15px rgba(255,255,255,0.4);
+    transform: translateY(0);
+}
+
+.arcade-btn.green { background: radial-gradient(circle at 30% 30%, #0f0, #080); }
+.arcade-btn.blue { background: radial-gradient(circle at 30% 30%, #0af, #05a); }
+.arcade-btn.red { background: radial-gradient(circle at 30% 30%, #f05, #a00); }
+
+/* Pressed state */
+.arcade-btn:active, .arcade-btn.active {
+    transform: translateY(10px);
+    /* Shadow shrinks to look pressed */
+    box-shadow: 0 2px 0 #111, 0 5px 10px rgba(0,0,0,0.8), inset 0 2px 10px rgba(255,255,255,0.8);
+}
+
+.arcade-btn.active.green { box-shadow: 0 2px 0 #050, 0 5px 30px #0f0, inset 0 2px 15px #fff; }
+.arcade-btn.active.blue { box-shadow: 0 2px 0 #005, 0 5px 30px #0af, inset 0 2px 15px #fff; }
+.arcade-btn.active.red { box-shadow: 0 2px 0 #500, 0 5px 30px #f05, inset 0 2px 15px #fff; }
+
+/* Switch for Outerwear */
+.arcade-middle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: rgba(0,0,0,0.4);
+    padding: 15px 30px;
+    border-radius: 12px;
+    border: 2px solid #333;
+    box-shadow: inset 0 5px 15px rgba(0,0,0,0.8);
+}
+
+.switch-label {
+    color: #0ff;
+    font-weight: bold;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 5px #0ff;
+}
+
+/* Toggle Switch styling */
+.arcade-switch {
+    position: relative;
+    display: inline-block;
+    width: 70px;
+    height: 35px;
+}
+.arcade-switch input { display: none; }
+.arcade-switch .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #222;
+    border-radius: 35px;
+    box-shadow: inset 0 5px 10px rgba(0,0,0,0.9);
+    transition: 0.4s;
+    border: 2px solid #444;
+}
+.arcade-switch .slider:before {
+    position: absolute;
+    content: "";
+    height: 25px;
+    width: 25px;
+    left: 3px;
+    bottom: 3px;
+    background: linear-gradient(180deg, #ccc, #888);
+    border-radius: 50%;
+    transition: 0.4s;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.6);
+}
+.arcade-switch input:checked + .slider {
+    background-color: #333;
+    border-color: #0ff;
+    box-shadow: inset 0 5px 10px rgba(0,0,0,0.9), 0 0 15px rgba(0,255,255,0.4);
+}
+.arcade-switch input:checked + .slider:before {
+    transform: translateX(35px);
+    background: linear-gradient(180deg, #fff, #aaa);
+    box-shadow: 0 0 15px #0ff, 0 5px 10px rgba(0,0,0,0.5);
+}
+
+/* Arcade Joystick */
+.arcade-joystick-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.joystick-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+}
+
+.joystick-base {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle at top left, #555, #111);
+    box-shadow: inset 0 0 15px #000, 0 10px 20px rgba(0,0,0,0.8);
+    border: 3px solid #666;
+    z-index: 1;
+}
+
+.joystick-stick {
+    position: absolute;
+    width: 18px;
+    height: 90px;
+    background: linear-gradient(90deg, #777, #eee, #777);
+    bottom: 40px;
+    z-index: 2;
+    border-radius: 9px;
+    transform-origin: bottom center;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 10px 0 15px rgba(0,0,0,0.6);
+    /* Default slight tilt back towards user */
+    transform: rotateX(15deg);
+}
+
+.joystick-ball {
+    position: absolute;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #f05, #800);
+    top: -30px;
+    z-index: 3;
+    box-shadow: inset -5px -5px 15px rgba(0,0,0,0.5), inset 5px 5px 15px rgba(255,255,255,0.5), 10px 10px 20px rgba(0,0,0,0.7);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: translateY(5px);
+}
+
+/* Joystick Animación hacia delante y atrás */
+.joystick-container.pulled .joystick-stick {
+    /* Push forward away from user */
+    transform: rotateX(-35deg);
+}
+.joystick-container.pulled .joystick-ball {
+    /* Ball goes up in 2D space because of rotation */
+    transform: translateY(-25px) scale(0.95);
+}
+
+.joystick-label {
+    color: #ffd700;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-shadow: 0 0 10px #ffd700;
+    font-size: 1.4rem;
+}
